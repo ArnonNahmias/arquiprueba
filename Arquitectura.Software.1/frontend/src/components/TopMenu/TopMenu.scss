@@ -1,0 +1,17 @@
+.top-menu{
+    .navbar-brand{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg{
+            height: 30px;
+            margin-right: 20px;
+        };
+
+        h2{
+            margin: 0px;
+            font-size: 22px;
+        };
+    }
+}

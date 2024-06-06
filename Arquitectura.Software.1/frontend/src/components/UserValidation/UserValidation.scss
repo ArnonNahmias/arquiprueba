@@ -1,0 +1,26 @@
+.user-validation {
+    margin-top: 50px;
+  
+    .login-form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: #f8f9fa;
+  
+      .form-label {
+        font-weight: bold;
+      }
+  
+      .form-control {
+        margin-bottom: 10px;
+      }
+  
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+  

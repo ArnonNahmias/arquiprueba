@@ -1,0 +1,26 @@
+.course-page {
+  padding: 20px;
+}
+
+.course-col {
+  margin-bottom: 20px;
+}
+
+.course-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.course-card img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.course-card .card-body {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
