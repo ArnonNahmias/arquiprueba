@@ -11,7 +11,7 @@ func main() {
 	clients.InitDB()
 
 	// Configurar el router
-	r := app.SetupRouter()
+	r := router.SetupRouter()
 
 	// Iniciar el servidor HTTP
 	if err := r.Run(":8080"); err != nil {

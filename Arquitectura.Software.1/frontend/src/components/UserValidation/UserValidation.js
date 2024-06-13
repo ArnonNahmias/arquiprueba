@@ -1,4 +1,3 @@
-// src/components/UserValidation/UserValidation.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
@@ -10,19 +9,29 @@ const UserValidation = ({ onLogin }) => {
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Dummy authentication logic
-    if (username === 'admin' && password === 'admin') {
+    try {
+      const response = await fetch('http://localhost:8080/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nombre_usuario: username, contrasena: password })
+      });
+
+      if (!response.ok) {
+        throw new Error('Invalid username or password');
+      }
+
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userId', data.userId);
       setMessage({ type: 'success', text: 'Login successful!' });
-      onLogin('admin');
+      onLogin(data.role);
       navigate('/');
-    } else if (username === 'user' && password === 'user') {
-      setMessage({ type: 'success', text: 'Login successful!' });
-      onLogin('commonUser');
-      navigate('/');
-    } else {
-      setMessage({ type: 'danger', text: 'Invalid username or password' });
+    } catch (error) {
+      setMessage({ type: 'danger', text: error.message });
     }
   };
 

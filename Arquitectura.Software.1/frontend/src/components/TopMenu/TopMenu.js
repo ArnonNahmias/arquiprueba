@@ -1,4 +1,3 @@
-// src/components/TopMenu/TopMenu.js
 import React, { useContext, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Container, NavLink, Navbar, Nav, Modal, Button, Row, Col, Card, Alert } from 'react-bootstrap';
@@ -16,8 +15,8 @@ const TopMenu = ({ userRole, onSignOut }) => {
 
   const handleUnenroll = (course) => {
     unenrollCourse(course);
-    setMessage(`Has anulado tu inscripción en el curso: ${course.title}`);
-    setTimeout(() => setMessage(null), 3000); // Clear message after 3 seconds
+    setMessage(`Has anulado tu inscripción en el curso: ${course.nombre}`);
+    setTimeout(() => setMessage(null), 3000); // Borra el mensaje después de 3 segundos
   };
 
   return (
@@ -40,11 +39,14 @@ const TopMenu = ({ userRole, onSignOut }) => {
               {enrolledCourses.map((course, index) => (
                 <Col key={index} xs={12} md={6} lg={4} className="course-col">
                   <Card className="course-card">
-                    {course.imageUrl && <Card.Img variant="top" src={course.imageUrl} alt={course.title} />}
+                    {course.imageURL && <Card.Img variant="top" src={course.imageURL} alt={course.nombre} />}
                     <Card.Body>
-                      <Card.Title>{course.title || 'No Title'}</Card.Title>
-                      <Card.Text>{course.description || 'No Description'}</Card.Text>
-                      <Card.Text><strong>Price:</strong> ${course.price}</Card.Text>
+                      <Card.Title>{course.nombre}</Card.Title>
+                      <Card.Text><strong>Dificultad:</strong> {course.dificultad}</Card.Text>
+                      <Card.Text><strong>Precio:</strong> ${course.precio}</Card.Text>
+                      <Card.Text><strong>Direccion:</strong> {course.direccion}</Card.Text>
+                      <Card.Text><small><strong>Created at:</strong> {course.created_at}</small></Card.Text>
+                      <Card.Text><small><strong>Updated at:</strong> {course.updated_at}</small></Card.Text>
                       <Button variant="danger" onClick={() => handleUnenroll(course)}>Anular Inscripción</Button>
                     </Card.Body>
                   </Card>

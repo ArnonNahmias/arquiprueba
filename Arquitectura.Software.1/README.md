@@ -11,7 +11,7 @@
 ## Autor
 
 - **Joaquín Lista**
-- **Felipe Ganame**
+- **Felipe Ganame Bixquert**
 - **Justina Antonucci**
 - **Arnon Nahmias**
 - **Francisco Ruibal**

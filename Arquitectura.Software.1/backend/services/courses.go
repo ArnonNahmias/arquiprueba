@@ -1,26 +1,16 @@
-package services
+package dao
 
 import (
-	"backend/dao"
-	"backend/domain"
+	"time"
 )
 
-func GetCourses() ([]domain.Course, error) {
-	return dao.GetCourses()
-}
-
-func GetCourseByID(id string) (*domain.Course, error) {
-	return dao.GetCourseByID(id)
-}
-
-func CreateCourse(course *domain.Course) error {
-	return dao.CreateCourse(course)
-}
-
-func UpdateCourse(id string, course *domain.Course) error {
-	return dao.UpdateCourse(id, course)
-}
-
-func DeleteCourse(id string) error {
-	return dao.DeleteCourse(id)
+type Course struct {
+	IdCurso    int       `gorm:"primaryKey;column:Id_curso;autoIncrement"`
+	Nombre     string    `gorm:"column:Nombre;not null"`
+	Dificultad string    `gorm:"column:Dificultad;not null"`
+	Precio     int       `gorm:"column:Precio;not null"`
+	Direccion  string    `gorm:"column:Direccion"`
+	ImageURL   string    `gorm:"column:ImageURL"`
+	CreatedAt  time.Time `gorm:"column:Created_at;autoCreateTime"`
+	UpdatedAt  time.Time `gorm:"column:Updated_at;autoUpdateTime"`
 }

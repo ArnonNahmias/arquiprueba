@@ -1,56 +1,41 @@
 package services
 
 import (
+	"backend/dao"
 	"backend/clients"
-	"crypto/md5"
 	"errors"
-	"fmt"
-	"github.com/golang-jwt/jwt/v5"
-	"strings"
+	"github.com/dgrijalva/jwt-go"
 	"time"
 )
 
-var jwtSecret = []byte("your_secret_key")
+var jwtKey = []byte("my_secret_key")
 
-func generateJWT(email string) (string, error) {
-	claims := jwt.MapClaims{
-		"email": email,
-		"exp":   time.Now().Add(time.Hour * 72).Unix(),
+type Claims struct {
+	Username string `json:"username"`
+	UserID   uint   `json:"userId"`
+	jwt.StandardClaims
+}
+
+func Login(username, password string) (string, uint, string, error) {
+	var user dao.Usuario
+	if err := clients.DB.Where("nombre_usuario = ? AND contrasena = ?", username, password).First(&user).Error; err != nil {
+		return "", 0, "", errors.New("invalid username or password")
 	}
+
+	expirationTime := time.Now().Add(24 * time.Hour)
+	claims := &Claims{
+		Username: username,
+		UserID:   uint(user.IdUsuario),
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtSecret)
-}
-
-func Login(email string, password string) (string, error) {
-	if strings.TrimSpace(email) == "" {
-		return "", errors.New("email is required")
-	}
-
-	if strings.TrimSpace(password) == "" {
-		return "", errors.New("password is required")
-	}
-
-	hash := fmt.Sprintf("%x", md5.Sum([]byte(password)))
-
-	userDAO, err := SelectUserByEmail(email)
+	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
-		return "", fmt.Errorf("error getting user from DB: %w", err)
+		return "", 0, "", err
 	}
 
-	if hash != userDAO.Password {
-		return "", fmt.Errorf("invalid credentials")
-	}
-
-	token, err := generateJWT(email)
-	if err != nil {
-		return "", fmt.Errorf("error generating JWT token: %w", err)
-	}
-
-	return token, nil
-}
-
-func SelectUserByEmail(email string) (*clients.Usuario, error) {
-	var user clients.Usuario
-	result := clients.DB.Where("email = ?", email).First(&user)
-	return &user, result.Error
+	return tokenString, uint(user.IdUsuario), user.Tipo, nil
 }
