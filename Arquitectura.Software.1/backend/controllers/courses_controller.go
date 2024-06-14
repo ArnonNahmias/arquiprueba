@@ -2,14 +2,18 @@ package controllers
 
 import (
 	"backend/dao"
-	"backend/clients"
+	"backend/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func GetCourses(c *gin.Context) {
-	var courses []dao.Course
-	clients.DB.Find(&courses)
+	courses, err := services.GetCourses()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, courses)
 }
 
@@ -19,20 +23,23 @@ func CreateCourse(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := clients.DB.Create(&course).Error; err != nil {
+	newCourse, err := services.CreateCourse(course)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, course)
+	c.JSON(http.StatusCreated, newCourse)
 }
 
 func DeleteCourse(c *gin.Context) {
-	var course dao.Course
-	id := c.Param("id")
-	if err := clients.DB.First(&course, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Course not found"})
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid course ID"})
 		return
 	}
-	clients.DB.Delete(&course)
+	if err := services.DeleteCourse(id); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.Status(http.StatusNoContent)
 }

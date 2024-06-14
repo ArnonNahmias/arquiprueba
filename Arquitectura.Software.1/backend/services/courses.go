@@ -1,16 +1,22 @@
-package dao
+package services
 
 import (
-	"time"
+	"backend/clients"
+	"backend/dao"
 )
 
-type Course struct {
-	IdCurso    int       `gorm:"primaryKey;column:Id_curso;autoIncrement"`
-	Nombre     string    `gorm:"column:Nombre;not null"`
-	Dificultad string    `gorm:"column:Dificultad;not null"`
-	Precio     int       `gorm:"column:Precio;not null"`
-	Direccion  string    `gorm:"column:Direccion"`
-	ImageURL   string    `gorm:"column:ImageURL"`
-	CreatedAt  time.Time `gorm:"column:Created_at;autoCreateTime"`
-	UpdatedAt  time.Time `gorm:"column:Updated_at;autoUpdateTime"`
+func GetCourses() ([]dao.Course, error) {
+	var courses []dao.Course
+	result := clients.DB.Find(&courses)
+	return courses, result.Error
+}
+
+func CreateCourse(course dao.Course) (dao.Course, error) {
+	result := clients.DB.Create(&course)
+	return course, result.Error
+}
+
+func DeleteCourse(id int) error {
+	result := clients.DB.Delete(&dao.Course{}, id)
+	return result.Error
 }

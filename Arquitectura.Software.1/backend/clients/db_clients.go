@@ -34,6 +34,6 @@ func SeedDB() {
 	admin := dao.Usuario{NombreUsuario: "admin", Contrasena: "admin", Tipo: "admin"}
 	user := dao.Usuario{NombreUsuario: "user", Contrasena: "user", Tipo: "normal"}
 
-	DB.FirstOrCreate(&admin, dao.Usuario{NombreUsuario: "admin"})
+	DB.FirstOrCreate(&admin, dao.Usuario{NombreUsuario: "	admin"})
 	DB.FirstOrCreate(&user, dao.Usuario{NombreUsuario: "user"})
 }

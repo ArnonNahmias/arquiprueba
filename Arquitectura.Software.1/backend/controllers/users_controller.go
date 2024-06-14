@@ -8,18 +8,21 @@ import (
 )
 
 func Login(c *gin.Context) {
-	var request dao.LoginRequest
-
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+	var loginRequest dao.LoginRequest
+	if err := c.ShouldBindJSON(&loginRequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	token, userId, role, err := services.Login(request.NombreUsuario, request.Contrasena)
+	token, userID, userType, err := services.Login(loginRequest.NombreUsuario, loginRequest.Contrasena)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, err.Error())
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token, "userId": userId, "role": role})
+	c.JSON(http.StatusOK, gin.H{
+		"token":  token,
+		"userId": userID,
+		"type":   userType,
+	})
 }

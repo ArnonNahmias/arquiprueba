@@ -1,8 +1,8 @@
 package services
 
 import (
-	"backend/dao"
 	"backend/clients"
+	"backend/dao"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"time"

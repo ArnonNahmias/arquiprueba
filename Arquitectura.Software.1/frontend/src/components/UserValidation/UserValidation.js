@@ -17,7 +17,7 @@ const UserValidation = ({ onLogin }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ nombre_usuario: username, contrasena: password })
+        body: JSON.stringify({ nombre_usuario: username.trim(), contrasena: password.trim() }) // Usar trim() para eliminar espacios en blanco
       });
 
       if (!response.ok) {
@@ -28,7 +28,7 @@ const UserValidation = ({ onLogin }) => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('userId', data.userId);
       setMessage({ type: 'success', text: 'Login successful!' });
-      onLogin(data.role);
+      onLogin(data.type);
       navigate('/');
     } catch (error) {
       setMessage({ type: 'danger', text: error.message });
@@ -38,7 +38,7 @@ const UserValidation = ({ onLogin }) => {
   return (
     <Container className="user-validation">
       <div className="login-form">
-        {message && <Alert variant={message.type}>{message.text}</Alert>}
+        {message && <Alert variant={message.type === 'danger' ? 'danger' : 'success'}>{message.text}</Alert>}
         <Form onSubmit={handleLogin}>
           <Form.Group controlId="formUsername">
             <Form.Label>Username</Form.Label>

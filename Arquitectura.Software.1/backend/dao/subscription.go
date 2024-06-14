@@ -5,9 +5,9 @@ import (
 )
 
 type Subscription struct {
-	ID           uint      `gorm:"primaryKey;column:Id_subscription;autoIncrement"`
-	UserID       uint      `gorm:"column:User_id;not null"`
-	CourseID     uint      `gorm:"column:Course_id;not null"`
-	CreationDate time.Time `gorm:"column:Creation_date;autoCreateTime"`
-	LastUpdated  time.Time `gorm:"column:Last_updated;autoUpdateTime"`
+	IdSubscription int       `gorm:"primaryKey;column:Id_subscription;autoIncrement"`
+	IdUsuario      int       `gorm:"column:Id_usuario;not null"`
+	IdCurso        int       `gorm:"column:Id_curso;not null"`
+	CreatedAt      time.Time `gorm:"column:Created_at;autoCreateTime"`
+	UpdatedAt      time.Time `gorm:"column:Updated_at;autoUpdateTime"`
 }
